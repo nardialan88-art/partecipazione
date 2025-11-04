@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fdfcf3;
+  overflow: hidden;
+  perspective: 2000px;
+  font-family: "Cormorant Garamond", serif;
+}
+
+.invito {
+  position: relative;
+  width: 90vw;
+  max-width: 1000px;
+  height: 90vh;
+  max-height: 650px;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* immagine interna (sfondo) */
+.interno {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("partecipazione matrimonio.jpeg");
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  z-index: 1;
+}
+
+.interno.visibile {
+  opacity: 1;
+}
+
+.porta {
+  position: absolute;
+  top: 0;
+  width: 415px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 2s ease-in-out;
+  transform-origin: center;
+}
+
+.porta.sx {
+  left: 0;
+  background-image: url("copertina-sx.jpeg");
+  transform-origin: left center;
+}
+
+.porta.dx {
+  right: 0;
+  background-image: url("copertina-dx.jpeg");
+  transform-origin: right center;
+  z-index: 5; /* sopra la sinistra */
+  margin-left: -15px; /* sovrapposizione della cera lacca */
+}
+
+}
+
+.porta.sx.aperta {
+  transform: rotateY(-180deg);
+}
+
+.porta.dx.aperta {
+  transform: rotateY(180deg);
+}
+
+@media (max-width: 768px) {
+  .invito {
+    width: 95vw;
+    height: 80vh;
+  }
+}

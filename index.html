@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partecipazione A&A</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #000;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    perspective: 2000px;
+  }
+
+  .invito {
+    position: relative;
+    width: 90vw; /* si adatta alla larghezza dello schermo */
+    max-width: 829px; /* limite massimo */
+    aspect-ratio: 829 / 1200; /* mantiene proporzioni */
+    transform-style: preserve-3d;
+   
+  }
+
+  /* sfondo fisso */
+  .sfondo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('partecipazione matrimonio.jpeg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    border-radius: 10px;
+  }
+
+  /* ante */
+  .anta-sx, .anta-dx {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: transform 2s ease-in-out;
+    transform-style: preserve-3d;
+    backface-visibility: visible;
+    z-index: 2;
+  }
+
+  /* anta sinistra */
+  .anta-sx {
+    left: 0;
+    width: 50%;
+    background-image: url('copertina partecipazione matrimonio sx.jpeg');
+    background-size: cover;
+    background-position: right;
+    transform-origin: left center;
+   
+  }
+
+  /* anta destra */
+  .anta-dx {
+    position: absolute;
+    right: 0;
+    width: 73%;
+    background-image: url('copertina partecipazione matrimonio dx.png');
+    background-size: cover;
+    background-position: left;
+    transform-origin: right center;
+    z-index: 5;
+  }
+
+  /* retro destro */
+  .anta-dx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('back dx.png');
+    background-size: cover;
+    background-position: left;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+  }
+
+  /* retro sinistro */
+  .anta-sx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('back sx.jpeg');
+    background-size: cover;
+    background-position: right;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+  }
+
+  /* apertura ante */
+  .invito.aperto .anta-sx {
+    transform: rotateY(-180deg);
+  }
+
+  .invito.aperto .anta-dx {
+    transform: rotateY(180deg);
+  }
+
+  /* animazioni responsive */
+  @media (max-width: 600px) {
+    .invito {
+      width: 95vw;
+      aspect-ratio: 829 / 1200;
+    }
+  }
+
+  audio {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="invito" id="invito">
+  <div class="sfondo"></div>
+  <div class="anta-sx"></div>
+  <div class="anta-dx"></div>
+</div>
+
+<audio id="crack" src="ice-break-14765.mp3"></audio>
+<audio id="soffio" src="soffio.mp3"></audio>
+
+<script>
+  const invito = document.getElementById('invito');
+  const crack = document.getElementById('crack');
+  const soffio = document.getElementById('soffio');
+
+  // Funzione che avvia un audio senza "bloccare" il flusso (catch ignora eventuali errori)
+  function playSafe(audioEl) {
+    try {
+      const p = audioEl.play();
+      if (p && typeof p.then === 'function') {
+        p.catch(err => {
+          // ignora l'errore ma logga per debug
+          console.log('audio play blocked or failed:', err);
+        });
+      }
+    } catch (e) {
+      console.log('playSafe error', e);
+    }
+  }
+
+  let aperto = false;
+
+  invito.addEventListener('click', () => {
+    if (!aperto) {
+      // Avvia il crack (non aspettiamo il risultato)
+      if (crack) {
+        crack.currentTime = 0;
+        playSafe(crack);
+        // stop opzionale dopo 3s (se vuoi lasciare, altrimenti commenta)
+        setTimeout(() => { try { crack.pause(); } catch(e){} }, 2000);
+      }
+
+      // apri le ante dopo 0.5s indipendentemente dall'audio
+      setTimeout(() => {
+        invito.classList.add('aperto');
+      }, 600);
+
+      // soffio dopo 2.5s (non blocca)
+      setTimeout(() => {
+        if (soffio) {
+          soffio.currentTime = 0;
+          playSafe(soffio);
+          setTimeout(() => { try { soffio.pause(); } catch(e){} }, 2000);
+        }
+      }, 2500);
+
+      aperto = true;
+    } else {
+      // richiudi immediatamente
+      invito.classList.remove('aperto');
+      aperto = false;
+    }
+  });
+</script>
+
+</body>
+</html>
