@@ -170,6 +170,33 @@
     transform: scale(0.65);
   }
 }
+/* --- Modalità Verticale Smartphone --- */
+@media (max-width: 600px) and (orientation: portrait) {
+
+  #invito {
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: auto;
+  }
+
+  .anta.sinistra,
+  .anta.destra {
+    width: 50% !important;
+  }
+
+  .anta.sinistra {
+    background-position: right;
+  }
+
+  .anta.destra {
+    background-position: left;
+  }
+
+  .sfondo {
+    background-size: contain;
+    background-position: center;
+  }
+}
 
 </style>
 </head>
@@ -267,6 +294,7 @@ console.log('Invito caricato — assicurati che i file immagine e audio siano ne
 </script>
 </body>
 </html>
+
 
 
 
