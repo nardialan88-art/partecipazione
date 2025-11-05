@@ -1,44 +1,51 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Partecipazione A&A</title>
 <style>
-  body {
-    margin: 0;
-    background-color: #000;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    perspective: 2000px;
+  /* ---------- Layout generale ---------- */
+  :root{
+    --max-w: 829px;
+    --aspect: 829/1200;
+    --open-deg: 180deg; /* rotazione completa */
+  }
+  html,body{height:100%;margin:0}
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000;
+    height:100vh;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+    font-family:serif;
   }
 
-  .invito {
-    position: relative;
-    width: 90vw; /* si adatta alla larghezza dello schermo */
-    max-width: 829px; /* limite massimo */
-    aspect-ratio: 829 / 1200; /* mantiene proporzioni */
-    transform-style: preserve-3d;
-   
+  /* contenitore principale responsive */
+  #invito{
+    width: min(95vw, var(--max-w));
+    aspect-ratio: var(--aspect);
+    position:relative;
+    perspective:2000px;
+    transform-style:preserve-3d;
   }
 
-  /* sfondo fisso */
-  .sfondo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url('partecipazione matrimonio.jpeg');
+  /* sfondo centrale (fisso) */
+  .sfondo{
+    position:absolute;
+    inset:0;
+    background-image: url("partecipazione matrimonio.jpeg");
     background-size: cover;
     background-position: center;
-    z-index: 1;
-    border-radius: 10px;
+    border-radius:10px;
+    z-index:1;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
   }
 
   /* ante */
-  .anta-sx, .anta-dx {
+  .anta.sinistra, .anta.destra {
     position: absolute;
     top: 0;
     height: 100%;
@@ -48,140 +55,196 @@
     z-index: 2;
   }
 
-  /* anta sinistra */
-  .anta-sx {
-    left: 0;
-    width: 50%;
-    background-image: url('copertina partecipazione matrimonio sx.jpeg');
-    background-size: cover;
-    background-position: right;
-    transform-origin: left center;
-   
+  /* ANTA SINISTRA */
+.anta.sinistra {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-image: url('copertina-sx.jpeg');
+  background-size: cover;
+  background-position: right;
+  transform-origin: left center;
+  transition: transform 2s ease-in-out;
+  box-shadow: inset -40px 0 60px rgba(0,0,0,0.6);
+  z-index: 4;
+}
+
+.anta.destra {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 75%;
+  height: 100%;
+  background-image: url('copertina-dx.png');
+  background-size: cover;
+  background-position: left;
+  transform-origin: right center;
+  transition: transform 2s ease-in-out;
+  box-shadow: none;
+  z-index: 7;
+
+  /* 👇 Spostamento verso destra */
+  transform: translateX(0px);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.face.back {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Mostra il retro quando si ruota */
+.face.back {
+  transform: rotateY(180deg);
+}
+
+.face.front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Stato aperto */
+.anta.sinistra.aperta {
+  transform: rotateY(-180deg);
+}
+.anta.destra.aperta {
+  transform: rotateY(180deg);
+}
+
+
+  /* stato aperto per singole ante */
+  .anta.sinistra.aperta { transform: rotateY(calc(-1 * var(--open-deg))); box-shadow: -30px 0 50px rgba(0,0,0,0.7); z-index:2; }
+  .anta.destra.aperta { transform: rotateY(var(--open-deg)); box-shadow: 30px 0 50px rgba(0,0,0,0.7); z-index:2; }
+
+  /* luce centrale che appare quando entrambe aperte */
+  #invito.luce::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 30%, transparent 70%);
+    transition: opacity .9s ease;
+    opacity:1;
   }
 
-  /* anta destra */
-  .anta-dx {
-    position: absolute;
-    right: 0;
-    width: 73%;
-    background-image: url('copertina partecipazione matrimonio dx.png');
-    background-size: cover;
-    background-position: left;
-    transform-origin: right center;
-    z-index: 5;
+  /* mobile tweak */
+  @media (max-width:600px){
+    .anta.destra { transform: translateX(6px); }
+    .anta.sinistra{ box-shadow: inset -10px 0 24px rgba(0,0,0,0.5); }
+    .anta.destra{ box-shadow: inset 10px 0 24px rgba(0,0,0,0.5); }
+    #invito{ width: 100vw; }
   }
 
-  /* retro destro */
-  .anta-dx::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('back dx.png');
-    background-size: cover;
-    background-position: left;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
-  }
-
-  /* retro sinistro */
-  .anta-sx::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('back sx.jpeg');
-    background-size: cover;
-    background-position: right;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
-  }
-
-  /* apertura ante */
-  .invito.aperto .anta-sx {
-    transform: rotateY(-180deg);
-  }
-
-  .invito.aperto .anta-dx {
-    transform: rotateY(180deg);
-  }
-
-  /* animazioni responsive */
-  @media (max-width: 600px) {
-    .invito {
-      width: 95vw;
-      aspect-ratio: 829 / 1200;
-    }
-  }
-
-  audio {
-    display: none;
-  }
+  /* aria di debug / fallback visibile (se immagini non caricano) */
+  .face.fallback{ display:flex; align-items:center; justify-content:center; background:#222; color:#fff; font-size:14px }
 </style>
 </head>
 <body>
 
-<div class="invito" id="invito">
-  <div class="sfondo"></div>
-  <div class="anta-sx"></div>
-  <div class="anta-dx"></div>
+<div id="invito" aria-label="Invito interattivo">
+  <div class="sfondo" role="img" aria-label="sfondo invitazione"></div>
+
+  <!-- ANTA SINISTRA -->
+  <div class="anta sinistra" id="antaSx" title="Clicca per aprire/chiudere anta sinistra">
+    <div class="face front">
+      <img src="copertina-sx.jpeg" alt="Anta sinistra - esterno">
+    </div>
+    <div class="face back" id="backSx" style='background-image: url("back-sx.jpeg");' aria-hidden="false"></div>
+  </div>
+
+  <!-- ANTA DESTRA -->
+  <div class="anta destra" id="antaDx" title="Clicca per aprire/chiudere anta destra">
+    <div class="face front">
+      <img src="copertina-dx.png" alt="Anta destra - esterno (con sigillo)">
+    </div>
+    <div class="face back" id="backDx" style='background-image: url("back-dx.png");' aria-hidden="false"></div>
+  </div>
 </div>
 
-<audio id="crack" src="ice-break-14765.mp3"></audio>
-<audio id="soffio" src="soffio.mp3"></audio>
+<!-- audio: assicurati che i file esistano con gli stessi nomi -->
+<audio id="crack" src="ice-break-14765_short.mp3" preload="auto"></audio>
+<audio id="soffio" src="soffio_short.mp3" preload="auto"></audio>
 
 <script>
-  const invito = document.getElementById('invito');
-  const crack = document.getElementById('crack');
-  const soffio = document.getElementById('soffio');
-
-  // Funzione che avvia un audio senza "bloccare" il flusso (catch ignora eventuali errori)
-  function playSafe(audioEl) {
-    try {
-      const p = audioEl.play();
-      if (p && typeof p.then === 'function') {
-        p.catch(err => {
-          // ignora l'errore ma logga per debug
-          console.log('audio play blocked or failed:', err);
-        });
-      }
-    } catch (e) {
-      console.log('playSafe error', e);
-    }
+/* ---------- Funzioni audio "sicure" ---------- */
+function playSafe(audioEl){
+  if(!audioEl) return;
+  try{
+    const p = audioEl.play();
+    if(p && typeof p.then === 'function') p.catch(e => console.warn('audio blocked', e));
+  }catch(e){
+    console.warn('playSafe error', e);
   }
+}
 
-  let aperto = false;
+/* ---------- gestione aperture indipendenti ---------- */
+const antaSx = document.getElementById('antaSx');
+const antaDx = document.getElementById('antaDx');
+const invito = document.getElementById('invito');
+const crack = document.getElementById('crack');
+const soffio = document.getElementById('soffio');
 
-  invito.addEventListener('click', () => {
-    if (!aperto) {
-      // Avvia il crack (non aspettiamo il risultato)
-      if (crack) {
-        crack.currentTime = 0;
-        playSafe(crack);
-        // stop opzionale dopo 3s (se vuoi lasciare, altrimenti commenta)
-        setTimeout(() => { try { crack.pause(); } catch(e){} }, 2000);
-      }
+let sxOpen = false;
+let dxOpen = false;
 
-      // apri le ante dopo 0.5s indipendentemente dall'audio
-      setTimeout(() => {
-        invito.classList.add('aperto');
-      }, 600);
+antaSx.addEventListener('click', (e)=>{
+  e.stopPropagation(); // non far propagare al contenitore
+  // piccolo soffio quando apro la sinistra
+  playSafe(soffio);
+ setTimeout(() => {
+    sxOpen = !sxOpen;
+    antaSx.classList.toggle('aperta', sxOpen);
+    aggiornaLuce();
+  }, 50);
+});
 
-      // soffio dopo 2.5s (non blocca)
-      setTimeout(() => {
-        if (soffio) {
-          soffio.currentTime = 0;
-          playSafe(soffio);
-          setTimeout(() => { try { soffio.pause(); } catch(e){} }, 2000);
-        }
-      }, 2500);
+antaDx.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  // solo l'anta destra suona "crack" (sigillo) prima di aprirsi
+  if (crack){
+    crack.currentTime = 0;
+    playSafe(crack);
+  }
+  // apri dopo un piccolo ritardo (0.3s)
+  setTimeout(() => {
+    dxOpen = !dxOpen;
+    antaDx.classList.toggle('aperta', dxOpen);
+    // un piccolo soffio quando si è aperta
+    if (dxOpen) setTimeout(()=> playSafe(soffio), 300);
+    aggiornaLuce();
+  }, 300);
+});
 
-      aperto = true;
-    } else {
-      // richiudi immediatamente
-      invito.classList.remove('aperto');
-      aperto = false;
-    }
-  });
+/* click esterno per chiudere entrambe (opzionale):*/
+document.addEventListener('click', (e)=>{
+  // se clicchi fuori dalle ante, richiudi entrambe (opzionale)
+  // qui lasciamo commentata la funzione per non interferire:
+  // if (sxOpen || dxOpen) { sxOpen=false; dxOpen=false; antaSx.classList.remove('aperta'); antaDx.classList.remove('aperta'); aggiornaLuce(); }
+});
+
+/* aggiorna la "luce" centrale quando entrambe le ante sono aperte */
+function aggiornaLuce(){
+  if (sxOpen && dxOpen) invito.classList.add('luce');
+  else invito.classList.remove('luce');
+}
+
+/* debug rapido: se qualcosa non appare, controlla la console del browser */
+console.log('Invito caricato — assicurati che i file immagine e audio siano nella stessa cartella di index.html');
 </script>
-
 </body>
 </html>
+
