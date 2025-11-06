@@ -141,55 +141,54 @@
     opacity:1;
   }
 
-  /* --- MOBILE (modalità B con scroll) --- */
-@media (max-width: 600px) {
+/* ---- MOBILE FULL-PAN (SCORRE VERTICALE + ORIZZONTALE) ---- */
+@media (max-width: 800px) {
 
-  body {
-    overflow-y: auto;
-    height: auto;
-    display: block;
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
     padding: 0;
+    overflow: auto !important; /* 🔥 abilita scroll */
+    background: #000;
+    touch-action: pan-x pan-y; /* 🔥 abilita trascinamento touch */
   }
 
   #invito{
-    width: 120vw; /* volutamente più largo per non schiacciare le ante */
+    width: auto;           /* non più adattato allo schermo */
     height: auto;
+    transform: none;       /* niente scale che tagliano */
     margin: 0 auto;
-    aspect-ratio: 829/1200;
-    perspective: 2000px;
+    display: block;
+    position: relative;
   }
 
-  .sfondo {
-    background-size: cover;
-  }
-
-  /* manteniamo le proporzioni originali delle ante */
-  .anta.sinistra{
+  /* Manteniamo ante proporzionali */
+  .anta.sinistra {
     width: 50%;
     background-position: right;
   }
 
-  .anta.destra{
-    width: 75%;
+  .anta.destra {
+    width: 50%;
     background-position: left;
   }
-}
 
-/* --- MOBILE ORIZZONTALE --- */
-@media (max-width: 900px) and (orientation: landscape){
-  body{
-    overflow: hidden;
-  }
-
-  #invito{
-    width: 95vw;
-    height: auto;
+  /* Lo sfondo ora mostra SEMPRE TUTTO e si può esplorare */
+  .sfondo{
+    background-size: contain !important; /* mostra 100% intero */
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 
-  /* aria di debug / fallback visibile (se immagini non caricano) */
-  .face.fallback{ display:flex; align-items:center; justify-content:center; background:#222; color:#fff; font-size:14px }
-
+/* Telefoni molto piccoli */
+@media (max-width: 430px){
+  #invito {
+    transform: scale(0.90);
+    transform-origin: center;
+  }
+}
 
 </style>
 </head>
@@ -287,6 +286,7 @@ console.log('Invito caricato — assicurati che i file immagine e audio siano ne
 </script>
 </body>
 </html>
+
 
 
 
