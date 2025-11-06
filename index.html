@@ -141,52 +141,29 @@
     opacity:1;
   }
 
-/* ---- MOBILE FULL-PAN (SCORRE VERTICALE + ORIZZONTALE) ---- */
-@media (max-width: 800px) {
-
-  html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: auto !important; /* 🔥 abilita scroll */
-    background: #000;
-    touch-action: pan-x pan-y; /* 🔥 abilita trascinamento touch */
+  @media (max-width: 600px){
+  body {
+    overflow-x: auto;   /* permette lo scroll in orizzontale */
+    overflow-y: auto;
   }
 
-  #invito{
-    width: auto;           /* non più adattato allo schermo */
+  #invito {
+    width: 1200px;      /* grandezza fissa → NON schiaccia più le ante */
     height: auto;
-    transform: none;       /* niente scale che tagliano */
     margin: 0 auto;
-    display: block;
-    position: relative;
   }
 
-  /* Manteniamo ante proporzionali */
   .anta.sinistra {
     width: 50%;
-    background-position: right;
   }
 
   .anta.destra {
-    width: 50%;
-    background-position: left;
+    width: 75%;
   }
 
-  /* Lo sfondo ora mostra SEMPRE TUTTO e si può esplorare */
-  .sfondo{
-    background-size: contain !important; /* mostra 100% intero */
-    background-repeat: no-repeat;
+  .sfondo {
+    background-size: contain; /* così non si taglia */
     background-position: center;
-  }
-}
-
-/* Telefoni molto piccoli */
-@media (max-width: 430px){
-  #invito {
-    transform: scale(0.90);
-    transform-origin: center;
   }
 }
 
@@ -286,6 +263,7 @@ console.log('Invito caricato — assicurati che i file immagine e audio siano ne
 </script>
 </body>
 </html>
+
 
 
 
