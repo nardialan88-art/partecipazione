@@ -25,12 +25,13 @@
 
   /* contenitore principale responsive */
   #invito{
-    width: min(95vw, var(--max-w));
-    aspect-ratio: var(--aspect);
-    position:relative;
-    perspective:2000px;
-    transform-style:preserve-3d;
-  }
+  width: min(135vw, calc(var(--max-w) * 1.35)); /* aumentiamo spazio orizzontale */
+  aspect-ratio: var(--aspect);
+  position:relative;
+  perspective:2000px;
+  transform-style:preserve-3d;
+  transform: translateX(12vw); /* 👉 sposta il contenuto verso destra */
+}
 
   /* sfondo centrale (fisso) */
   .sfondo{
@@ -263,6 +264,7 @@ console.log('Invito caricato — assicurati che i file immagine e audio siano ne
 </script>
 </body>
 </html>
+
 
 
 
