@@ -141,78 +141,54 @@
     opacity:1;
   }
 
-  /* --- MOBILE STANDARD --- */
-@media (max-width: 600px){
-  #invito{
-    width: 100vw;
+  /* --- MOBILE (modalità B con scroll) --- */
+@media (max-width: 600px) {
+
+  body {
+    overflow-y: auto;
     height: auto;
+    display: block;
+    padding: 0;
+  }
+
+  #invito{
+    width: 120vw; /* volutamente più largo per non schiacciare le ante */
+    height: auto;
+    margin: 0 auto;
     aspect-ratio: 829/1200;
-    transform: scale(0.82); /* ← puoi aumentare a 0.90 o ridurre a 0.70 */
-    transform-origin: center;
+    perspective: 2000px;
   }
 
-  .anta.sinistra,
-  .anta.destra{
-    width: 50% !important; /* le riportiamo uguali per far entrare tutto */
+  .sfondo {
+    background-size: cover;
   }
 
+  /* manteniamo le proporzioni originali delle ante */
   .anta.sinistra{
+    width: 50%;
     background-position: right;
-    box-shadow: inset -14px 0 30px rgba(0,0,0,0.6);
   }
 
   .anta.destra{
+    width: 75%;
     background-position: left;
-    box-shadow: inset 14px 0 30px rgba(0,0,0,0.6);
   }
 }
 
+/* --- MOBILE ORIZZONTALE --- */
+@media (max-width: 900px) and (orientation: landscape){
+  body{
+    overflow: hidden;
+  }
+
+  #invito{
+    width: 95vw;
+    height: auto;
+  }
+}
 
   /* aria di debug / fallback visibile (se immagini non caricano) */
   .face.fallback{ display:flex; align-items:center; justify-content:center; background:#222; color:#fff; font-size:14px }
-
-/* Riduzione automatica su schermi stretti */
-@media (max-width: 600px){
-  #invito {
-    width: min(85vw, var(--max-w)); /* era 95vw → ora 85vw, più stretto */
-    height: auto;
-    aspect-ratio: 829/1200;
-    transform-origin: center;
-    transform: scale(0.78); /* RIDUCI / AUMENTA QUI */
-  }
-}
-
-/* Per telefoni molto piccoli */
-@media (max-width: 400px){
-  #invito {
-    transform: scale(0.65);
-  }
-}
-/* --- MOBILE STANDARD --- */
-@media (max-width: 600px){
-  #invito{
-    width: 100vw;
-    height: auto;
-    aspect-ratio: 829/1200;
-    transform: scale(0.90); /* ← puoi aumentare a 0.90 o ridurre a 0.70 */
-    transform-origin: center;
-  }
-
-  .anta.sinistra,
-  .anta.destra{
-    width: 50% !important; /* le riportiamo uguali per far entrare tutto */
-  }
-
-  .anta.sinistra{
-    background-position: right;
-    box-shadow: inset -14px 0 30px rgba(0,0,0,0.6);
-  }
-
-  .anta.destra{
-    background-position: left;
-    box-shadow: inset 14px 0 30px rgba(0,0,0,0.6);
-  }
-}
 
 
 </style>
@@ -311,6 +287,7 @@ console.log('Invito caricato — assicurati che i file immagine e audio siano ne
 </script>
 </body>
 </html>
+
 
 
 
